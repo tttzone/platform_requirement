@@ -7,6 +7,7 @@
  * License :  Whatever you want! :D
  */
 
+var fs = require('fs')
 var express = require("express"),
     app = express(),
     mongoose = require('mongoose'),
@@ -33,47 +34,46 @@ app.configure(function () {
     app.use(express.static(__dirname+'/public'));
 	
     
-	var fs = require('fs')
 
-    // app.engine('html', engines.handlebars);
+    app.engine('html', engines.handlebars);
 
-    // app.set('views', __dirname + '/views');
-    // app.set('view engine', 'html');
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'html');
 
-    // app.set('PORT', process.env.PORT || 5000);
-    // app.set('MONGODB_URI', process.env.MONGOLAB_URI ||
-        // process.env.MONGOHQ_URL || 'mongodb://localhost/account');
+    app.set('PORT', process.env.PORT || 5000);
+    app.set('MONGODB_URI', process.env.MONGOLAB_URI ||
+        process.env.MONGOHQ_URL || 'mongodb://localhost/account');
 
-// });
+});
 
 // /**
  // * MongoDB connection
  // */
-// var db = mongoose.createConnection(app.get('MONGODB_URI'));
+var db = mongoose.createConnection(app.get('MONGODB_URI'));
 
-// db.on('connected', function () {
-    // console.log('Connected to MongoDB.');
+db.on('connected', function () {
+    console.log('Connected to MongoDB.');
 
-// });
+});
 
-// db.on('error', function (err) {
-    // console.error.bind(console, 'Connection to MongoDB error!.');
-// });
+db.on('error', function (err) {
+    console.error.bind(console, 'Connection to MongoDB error!.');
+});
 
-// db.on('close', function () {
-    // console.log('Connection to MongoDB closed.');
-// });
+db.on('close', function () {
+    console.log('Connection to MongoDB closed.');
+});
 
 // Schema
-// var PersonsSchema = new mongoose.Schema({
-        // fullname: 'string',
-        // username: 'string',
-        // email: 'string',
-        // password: 'string',
-        // address: 'string'
-    // }),
+var PersonsSchema = new mongoose.Schema({
+        fullname: 'string',
+        username: 'string',
+        email: 'string',
+        password: 'string',
+        address: 'string'
+    }),
 
-    // Persons = db.model('Account', PersonsSchema);
+    Persons = db.model('Account', PersonsSchema);
 
 // Routes
 app.get("/", function (req, res) {
@@ -87,25 +87,25 @@ app.get("/", function (req, res) {
 app.get("/persons", function (req, res) {
     // Find All 
 
-	fs.readFile('./users.json', 'utf-8', function(err, data) {
-		if (err) throw err
+	// fs.readFile('./users.json', 'utf-8', function(err, data) {
+		// if (err) throw err
 
-		var arrayOfObjects = JSON.parse(data)
-	})
-    // Persons.find(function (err, persons) {
-        // if (err) res.json({error: err})
+		// var arrayOfObjects = JSON.parse(data)
+	// })
+    Persons.find(function (err, persons) {
+        if (err) res.json({error: err})
 
-        // if(persons)
-            // res.json({persons: persons});
-    // })
+        if(persons)
+            res.json({persons: persons});
+    })
 });
 
 // POST (proses register)
 app.post("/persons", function(req, res){
-    /**
-     * Get data from post
-     * @type {Persons}
-     */
+    // /**
+     // * Get data from post
+     // * @type {Persons}
+     // */
     var person = new Persons({
         fullname: req.body.fullname,
         username: req.body.username,
@@ -113,56 +113,55 @@ app.post("/persons", function(req, res){
         address: req.body.address,
         password: req.body.password 
     });
+	 
+
+	// fs.readFile('./users.json', 'utf-8', function(err, data) {
+		// if (err) throw err
+
+		// var arrayOfObjects = JSON.parse(data)
+		// arrayOfObjects.users.push({
+			// fullname: req.body.fullname,
+			// username: req.body.username,
+			// email: req.body.email,
+			// address: req.body.address,
+			// password: req.body.password 
+		// })
+
+		// console.log(arrayOfObjects)
+	// })
 	
-	var fs = require('fs')
-
-	fs.readFile('./users.json', 'utf-8', function(err, data) {
-		if (err) throw err
-
-		var arrayOfObjects = JSON.parse(data)
-		arrayOfObjects.users.push({
-			fullname: req.body.fullname,
-			username: req.body.username,
-			email: req.body.email,
-			address: req.body.address,
-			password: req.body.password 
-		})
-
-		console.log(arrayOfObjects)
-	})
-	
-    // person.save(function (err, person) {
-        // if (err) {
-            // res.send({error:err});
-        // }else {
-            // console.log('Save data: ' + person);
-            // res.json({message: ' save ok'});
-        // }
-    // })
+    person.save(function (err, person) {
+        if (err) {
+            res.send({error:err});
+        }else {
+            console.log('Save data: ' + person);
+            res.json({message: ' save ok'});
+        }
+    })
 });
 
 // GET /persons/:username (login)
 app.get('/persons/:username', function(req, res){
 
-	fs.readFile('./users.json', 'utf-8', function(err, data) {
-		if (err) throw err
+	// fs.readFile('./users.json', 'utf-8', function(err, data) {
+		// if (err) throw err
 
-		var arrayOfObjects = JSON.parse(data)
-	})
+		// var arrayOfObjects = JSON.parse(data)
+	// })
 	
-	// var param_username = req.params.username;
+	var param_username = req.params.username;
 
-    // Persons.find({username:param_username}, function(err, person){
-        // if(err) {
-            // res.json({
-                // data:"Error finding person."
-            // });
-        // }else {
-            // res.json({
-                // person: person
-            // });
-        // }
-    // })
+    Persons.find({username:param_username}, function(err, person){
+        if(err) {
+            res.json({
+                data:"Error finding person."
+            });
+        }else {
+            res.json({
+                person: person
+            });
+        }
+    })
 });
 
 //Upload
