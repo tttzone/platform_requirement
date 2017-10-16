@@ -7,30 +7,33 @@
  * License :  Whatever you want! :D
  */
 
-// var express = require("express"),
-    // app = express(),
-    // mongoose = require('mongoose'),
-    // path = require('path'),
-    // engines = require('consolidate');
+var express = require("express"),
+    app = express(),
+    mongoose = require('mongoose'),
+    path = require('path'),
+    engines = require('consolidate');
 
-// app.configure(function () {
-    // app.use(express.logger());
+app.configure(function () {
+    app.use(express.logger());
 
-    // app.use(function(req, res, next) {
-        // res.header('Access-Control-Allow-Origin', '*');
-        // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        // res.header('Access-Control-Allow-Headers', 'Content-Type')
-        // if ('OPTIONS' == req.method) {
-            // res.send(200);
-        // }
-        // else {
-            // next();
-        // }
-    // })
+    app.use(function(req, res, next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type')
+        if ('OPTIONS' == req.method) {
+            res.send(200);
+        }
+        else {
+            next();
+        }
+    })
 
-    // app.use(express.bodyParser());
-    // app.use(express.methodOverride());
-    // app.use(express.static(__dirname+'/public'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(express.static(__dirname+'/public'));
+	
+    
+	var fs = require('fs')
 
     // app.engine('html', engines.handlebars);
 
@@ -82,8 +85,7 @@ app.get("/", function (req, res) {
 
 // GET /persons (account setting)
 app.get("/persons", function (req, res) {
-    // Find All
-	var fs = require('fs')
+    // Find All 
 
 	fs.readFile('./users.json', 'utf-8', function(err, data) {
 		if (err) throw err
@@ -141,8 +143,6 @@ app.post("/persons", function(req, res){
 
 // GET /persons/:username (login)
 app.get('/persons/:username', function(req, res){
-    
-	var fs = require('fs')
 
 	fs.readFile('./users.json', 'utf-8', function(err, data) {
 		if (err) throw err
