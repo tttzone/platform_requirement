@@ -7,7 +7,6 @@
  * License :  Whatever you want! :D
  */
 
-var fs = require('fs')
 var express = require("express"),
     app = express(),
     mongoose = require('mongoose'),
@@ -32,8 +31,6 @@ app.configure(function () {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
     app.use(express.static(__dirname+'/public'));
-	
-    
 
     app.engine('html', engines.handlebars);
 
@@ -85,13 +82,7 @@ app.get("/", function (req, res) {
 
 // GET /persons (account setting)
 app.get("/persons", function (req, res) {
-    // Find All 
-
-	// fs.readFile('./users.json', 'utf-8', function(err, data) {
-		// if (err) throw err
-
-		// var arrayOfObjects = JSON.parse(data)
-	// })
+    // Find All
     Persons.find(function (err, persons) {
         if (err) res.json({error: err})
 
@@ -113,23 +104,7 @@ app.post("/persons", function(req, res){
         address: req.body.address,
         password: req.body.password 
     });
-	 
 
-	// fs.readFile('./users.json', 'utf-8', function(err, data) {
-		// if (err) throw err
-
-		// var arrayOfObjects = JSON.parse(data)
-		// arrayOfObjects.users.push({
-			// fullname: req.body.fullname,
-			// username: req.body.username,
-			// email: req.body.email,
-			// address: req.body.address,
-			// password: req.body.password 
-		// })
-
-		// console.log(arrayOfObjects)
-	// })
-	
     person.save(function (err, person) {
         if (err) {
             res.send({error:err});
@@ -142,14 +117,7 @@ app.post("/persons", function(req, res){
 
 // GET /persons/:username (login)
 app.get('/persons/:username', function(req, res){
-
-	// fs.readFile('./users.json', 'utf-8', function(err, data) {
-		// if (err) throw err
-
-		// var arrayOfObjects = JSON.parse(data)
-	// })
-	
-	var param_username = req.params.username;
+    var param_username = req.params.username;
 
     Persons.find({username:param_username}, function(err, person){
         if(err) {
@@ -183,7 +151,7 @@ server.post('/upload', (req, res) => {
 })
 
 // Download
-server.post('/download', (req, res) => {
+function download(url, dest, callback) {
     var file = fs.createWriteStream(dest);
     var request = http.get(url, function (response) {
         response.pipe(file);
