@@ -70,7 +70,7 @@ var PersonsSchema = new mongoose.Schema({
         address: 'string'
     }),
 
-    Persons = db.model('Account', PersonsSchema);
+Persons = db.model('Account', PersonsSchema);
 
 // Routes
 app.get("/", function (req, res) {
@@ -133,38 +133,38 @@ app.get('/persons/:username', function(req, res){
 });
 
 //Upload
-server.post('/upload', (req, res) => {
-  let form = new formidable.IncomingForm()
-  form.uploadDir = path.join(__dirname, 'uploads')
-  form.hash = true
-  form.multiples = false
-  form.keepExtensions = true
+// server.post('/upload', (req, res) => {
+  // let form = new formidable.IncomingForm()
+  // form.uploadDir = path.join(__dirname, 'uploads')
+  // form.hash = true
+  // form.multiples = false
+  // form.keepExtensions = true
 
-  form.parse(req, (err, fields, files) => {
-    if (!err) {
-      console.log(files.file.name)
-      console.log(files.file.path)
-      console.log(files.file.type)
-    }
-    res.end()
-  })
-})
+  // form.parse(req, (err, fields, files) => {
+    // if (!err) {
+      // console.log(files.file.name)
+      // console.log(files.file.path)
+      // console.log(files.file.type)
+    // }
+    // res.end()
+  // })
+// })
 
 // Download
-function download(url, dest, callback) {
-    var file = fs.createWriteStream(dest);
-    var request = http.get(url, function (response) {
-        response.pipe(file);
-        file.on('finish', function () {
-            file.close(callback); // close() is async, call callback after close completes.
-        });
-        file.on('error', function (err) {
-            fs.unlink(dest); // Delete the file async. (But we don't check the result)
-            if (callback)
-                callback(err.message);
-        });
-    });
-}
+// function download(url, dest, callback) {
+    // var file = fs.createWriteStream(dest);
+    // var request = http.get(url, function (response) {
+        // response.pipe(file);
+        // file.on('finish', function () {
+            // file.close(callback);  
+        // });
+        // file.on('error', function (err) {
+            // fs.unlink(dest);  
+            // if (callback)
+                // callback(err.message);
+        // });
+    // });
+// }
 
 
 app.listen(app.get('PORT'));
