@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]>
+<html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>
+<html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>
+<html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en"> <!--<![endif]-->
+<head>
+
+    <!-- Basic Page Needs
+  ================================================== -->
+    <meta charset="utf-8">
+    <title>Koneksi Node & MongoDB</title>
+    <meta name="description" content="">
+    <meta name="author" content="Equan Pr.">
+
+    <!-- Mobile Specific Metas
+  ================================================== -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- CSS
+  ================================================== -->
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/skeleton.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/style.css"/>
+
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Favicons
+    ================================================== -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
+</head>
+<body>
+
+<div class="container">
+    <div class="sixteen columns">
+        <h1 style="margin-top: 40px">Persons REST API</h1>
+    </div>
+    <div class="sixteen columns">
+        <span class="pretview">{{ data }}</span>
+        <table style="margin-bottom:24px;">
+            <tbody><tr class="alt-table-row">
+                <th>Method</th>
+                <th>URL</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>/persons</td>
+                <td>Get all persons data</td>
+            </tr>
+            <tr class="alt-table-row">
+                <td>GET</td>
+                <td>/persons/user_name</td>
+                <td>Get person data based on it's username</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>/persons</td>
+                <td>Create new person data</td>
+            </tr>
+            <tr class="alt-table-row">
+                <td>PUT</td>
+                <td>/persons/user_name</td>
+                <td>Update person data based on it's username</td>
+            </tr>
+            <tr>
+                <td>DELETE</td>
+                <td>/persons/user_name</td>
+                <td>Delete person</td>
+            </tr>
+            </tbody></table>
+    </div>
+    <div class="sixteen columns">
+        <h5><a  class="button" href="https://github.com/junwatu/koneksi-node-mongodb"><i class="icon-github icon-large"></i> Github</a></h5>
+    </div>
+</div>
+
+</body>
+</html>
