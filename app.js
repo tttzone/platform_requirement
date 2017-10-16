@@ -7,70 +7,70 @@
  * License :  Whatever you want! :D
  */
 
-var express = require("express"),
-    app = express(),
-    mongoose = require('mongoose'),
-    path = require('path'),
-    engines = require('consolidate');
+// var express = require("express"),
+    // app = express(),
+    // mongoose = require('mongoose'),
+    // path = require('path'),
+    // engines = require('consolidate');
 
-app.configure(function () {
-    app.use(express.logger());
+// app.configure(function () {
+    // app.use(express.logger());
 
-    app.use(function(req, res, next) {
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        res.header('Access-Control-Allow-Headers', 'Content-Type')
-        if ('OPTIONS' == req.method) {
-            res.send(200);
-        }
-        else {
-            next();
-        }
-    })
+    // app.use(function(req, res, next) {
+        // res.header('Access-Control-Allow-Origin', '*');
+        // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        // res.header('Access-Control-Allow-Headers', 'Content-Type')
+        // if ('OPTIONS' == req.method) {
+            // res.send(200);
+        // }
+        // else {
+            // next();
+        // }
+    // })
 
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-    app.use(express.static(__dirname+'/public'));
+    // app.use(express.bodyParser());
+    // app.use(express.methodOverride());
+    // app.use(express.static(__dirname+'/public'));
 
-    app.engine('html', engines.handlebars);
+    // app.engine('html', engines.handlebars);
 
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'html');
+    // app.set('views', __dirname + '/views');
+    // app.set('view engine', 'html');
 
-    app.set('PORT', process.env.PORT || 5000);
-    app.set('MONGODB_URI', process.env.MONGOLAB_URI ||
-        process.env.MONGOHQ_URL || 'mongodb://localhost/account');
+    // app.set('PORT', process.env.PORT || 5000);
+    // app.set('MONGODB_URI', process.env.MONGOLAB_URI ||
+        // process.env.MONGOHQ_URL || 'mongodb://localhost/account');
 
-});
+// });
 
-/**
- * MongoDB connection
- */
-var db = mongoose.createConnection(app.get('MONGODB_URI'));
+// /**
+ // * MongoDB connection
+ // */
+// var db = mongoose.createConnection(app.get('MONGODB_URI'));
 
-db.on('connected', function () {
-    console.log('Connected to MongoDB.');
+// db.on('connected', function () {
+    // console.log('Connected to MongoDB.');
 
-});
+// });
 
-db.on('error', function (err) {
-    console.error.bind(console, 'Connection to MongoDB error!.');
-});
+// db.on('error', function (err) {
+    // console.error.bind(console, 'Connection to MongoDB error!.');
+// });
 
-db.on('close', function () {
-    console.log('Connection to MongoDB closed.');
-});
+// db.on('close', function () {
+    // console.log('Connection to MongoDB closed.');
+// });
 
 // Schema
-var PersonsSchema = new mongoose.Schema({
-        fullname: 'string',
-        username: 'string',
-        email: 'string',
-        password: 'string',
-        address: 'string'
-    }),
+// var PersonsSchema = new mongoose.Schema({
+        // fullname: 'string',
+        // username: 'string',
+        // email: 'string',
+        // password: 'string',
+        // address: 'string'
+    // }),
 
-    Persons = db.model('Account', PersonsSchema);
+    // Persons = db.model('Account', PersonsSchema);
 
 // Routes
 app.get("/", function (req, res) {
@@ -83,12 +83,19 @@ app.get("/", function (req, res) {
 // GET /persons (account setting)
 app.get("/persons", function (req, res) {
     // Find All
-    Persons.find(function (err, persons) {
-        if (err) res.json({error: err})
+	var fs = require('fs')
 
-        if(persons)
-            res.json({persons: persons});
-    })
+	fs.readFile('./users.json', 'utf-8', function(err, data) {
+		if (err) throw err
+
+		var arrayOfObjects = JSON.parse(data)
+	})
+    // Persons.find(function (err, persons) {
+        // if (err) res.json({error: err})
+
+        // if(persons)
+            // res.json({persons: persons});
+    // })
 });
 
 // POST (proses register)
@@ -104,73 +111,93 @@ app.post("/persons", function(req, res){
         address: req.body.address,
         password: req.body.password 
     });
+	
+	var fs = require('fs')
 
-    person.save(function (err, person) {
-        if (err) {
-            res.send({error:err});
-        }else {
-            console.log('Save data: ' + person);
-            res.json({message: ' save ok'});
-        }
-    })
+	fs.readFile('./users.json', 'utf-8', function(err, data) {
+		if (err) throw err
+
+		var arrayOfObjects = JSON.parse(data)
+		arrayOfObjects.users.push({
+			fullname: req.body.fullname,
+			username: req.body.username,
+			email: req.body.email,
+			address: req.body.address,
+			password: req.body.password 
+		})
+
+		console.log(arrayOfObjects)
+	})
+	
+    // person.save(function (err, person) {
+        // if (err) {
+            // res.send({error:err});
+        // }else {
+            // console.log('Save data: ' + person);
+            // res.json({message: ' save ok'});
+        // }
+    // })
 });
 
 // GET /persons/:username (login)
 app.get('/persons/:username', function(req, res){
-    var param_username = req.params.username;
+    
+	var fs = require('fs')
 
-    Persons.find({username:param_username}, function(err, person){
-        if(err) {
-            res.json({
-                data:"Error finding person."
-            });
-        }else {
-            res.json({
-                person: person
-            });
-        }
-    })
+	fs.readFile('./users.json', 'utf-8', function(err, data) {
+		if (err) throw err
+
+		var arrayOfObjects = JSON.parse(data)
+	})
+	
+	// var param_username = req.params.username;
+
+    // Persons.find({username:param_username}, function(err, person){
+        // if(err) {
+            // res.json({
+                // data:"Error finding person."
+            // });
+        // }else {
+            // res.json({
+                // person: person
+            // });
+        // }
+    // })
 });
 
 //Upload
-// PUT /persons/:username
-// app.put('/persons/:username', function(req, res){
-    // var query = {username: req.params.username},
-        // data_update = {
-            // fullname : req.body.name,
-            // username: req.params.username,
-            // email: req.body.email,
-            // password: req.body.password
-        // }
+server.post('/upload', (req, res) => {
+  let form = new formidable.IncomingForm()
+  form.uploadDir = path.join(__dirname, 'uploads')
+  form.hash = true
+  form.multiples = false
+  form.keepExtensions = true
 
-    // Persons.update(query, data_update, {multi:false}, function(err, numberAffected, rawResponse ){
-        // if(err) {
-            // res.json({
-                // error:err
-            // })
-        // }else {
-            // res.json({
-                // numberAffected:numberAffected,
-                // rawResponse: rawResponse
-            // });
-        // }
-    // });
-
-// });
+  form.parse(req, (err, fields, files) => {
+    if (!err) {
+      console.log(files.file.name)
+      console.log(files.file.path)
+      console.log(files.file.type)
+    }
+    res.end()
+  })
+})
 
 // Download
-// app.delete('/persons/:username', function(req, res){
-    // var param_username_del = req.params.username;
-
-    // Persons.remove({username:param_username_del}, function(err){
-        // if(err){ res.json({
-            // error:err
-        // })
-        // }else {
-            // res.json({message: "delete ok"});
-        // }
-    // });
-// });
+server.post('/download', (req, res) => {
+    var file = fs.createWriteStream(dest);
+    var request = http.get(url, function (response) {
+        response.pipe(file);
+        file.on('finish', function () {
+            file.close(callback); // close() is async, call callback after close completes.
+        });
+        file.on('error', function (err) {
+            fs.unlink(dest); // Delete the file async. (But we don't check the result)
+            if (callback)
+                callback(err.message);
+        });
+    });
+}
 
 
 app.listen(app.get('PORT'));
